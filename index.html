@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas id="avatar-canvas"></canvas>
+    <script>
+      const createAvatar = (firstName, lastName, canvasId) => {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext("2d");
+
+        let avatarSize = 200;
+        let fontSize = avatarSize / 2;
+        canvas.width = avatarSize;
+        canvas.height = avatarSize;
+
+        let bgColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        let textColor = luminance(bgColor) > 0.5 ? "black" : "white";
+
+        ctx.beginPath();
+        ctx.arc(avatarSize / 2, avatarSize / 2, avatarSize / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = bgColor;
+        ctx.fill();
+
+        ctx.font = fontSize + "px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = textColor;
+
+        let initials = firstName.charAt(0) + lastName.charAt(0);
+        ctx.fillText(initials, 100, 100);
+
+        console.log(ctx);
+        console.log(initials);
+      };
+      function luminance(color) {
+        let colorArray = colorToRGBArray(color);
+        return (
+          (0.2126 * colorArray[0] +
+            0.0722 * colorArray[1] +
+            0.0722 * colorArray[2]) /
+          255
+        );
+        console.log(colorArray);
+      }
+      function colorToRGBArray(color) {
+        let cvs = document.createElement("canvas");
+        let context = cvs.getContext("2d");
+        context.fillStyle = color;
+        context.fillRect(0, 0, 1, 1);
+        let data = context.getImageData(0, 0, 1, 1).data;
+        return data.slice(0, 3);
+      }
+      createAvatar("Pooria", "Eshghi", "avatar-canvas");
+    </script>
+  </body>
+</html>
